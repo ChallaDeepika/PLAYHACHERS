@@ -1,0 +1,256 @@
+create database figma_interface1;
+Query OK, 1 row affected (0.50 sec)
+
+
+use database figma_interface1;
+ERROR 1049 (42000): Unknown database 'database'
+
+
+mysql> USE figma_interface1;
+Database changed
+
+
+mysql> CREATE TABLE LOGIN_DETAILS(
+    -> USERNAME VARCHAR(50) NOT NULL UNIQUE,
+    -> PASSWORD VARCHAR(30) NOT NULL ,
+    -> GAMER_TAG VARCHAR(50) UNIQUE);
+Query OK, 0 rows affected (0.71 sec)
+
+
+
+mysql> ALTER TABLE LOGIN_DETAILS ADD UNIQUE(USERNAME,GAMER_TAG);
+Query OK, 0 rows affected (1.90 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+
+
+mysql> INSERT INTO login_details (username, password, gamer_tag) VALUES
+    -> ('SAHIL', 'S123', 'SAHILPLAYS'),
+    -> ('PRANOV', 'P123', 'PRANOVISLIVE');
+Query OK, 2 rows affected (0.32 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+
+
+
+mysql> SELECT * FROM LOGIN_DETAILS;
++----------+----------+--------------+
+| USERNAME | PASSWORD | GAMER_TAG    |
++----------+----------+--------------+
+| PRANOV   | P123     | PRANOVISLIVE |
+| SAHIL    | S123     | SAHILPLAYS   |
++----------+----------+--------------+
+2 rows in set (0.00 sec)
+
+
+
+
+CREATE TABLE user_purchases (
+    -> purchase_id INT AUTO_INCREMENT PRIMARY KEY,
+    -> username VARCHAR(50) NOT NULL,
+    ->  gamer_tag VARCHAR(50) NOT NULL,
+    -> game_name VARCHAR(100) NOT NULL,
+    ->  purchase_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    -> FOREIGN KEY (username, gamer_tag) REFERENCES login_details(username, gamer_tag)
+    -> );
+Query OK, 0 rows affected (1.78 sec)
+2  Duplicates: 0  Warnings: 0
+
+
+
+mysql> SELECT * FROM USER_PURCHASES;
++-------------+----------+--------------+---------------------+---------------------+
+| purchase_id | username | gamer_tag    | game_name           | purchase_date       |
++-------------+----------+--------------+---------------------+---------------------+
+|      218534 | SAHIL    | SAHILPLAYS   | RED DEAD REDEMPTION | 2023-03-23 00:00:00 |
+|      317865 | PRANOV   | PRANOVISLIVE | CYBERPUNK           | 2024-08-16 00:00:00 |
++-------------+----------+--------------+---------------------+---------------------+
+
+
+
+
+mysql> CREATE TABLE USER_UPLOADS (
+    ->     UPLOAD_ID INT AUTO_INCREMENT PRIMARY KEY,
+    ->     USERNAME VARCHAR(50) NOT NULL,
+    ->     GAMER_TAG VARCHAR(50) NOT NULL,
+    ->     ACHIEVEMENT_SCREENSHOT BLOB NOT NULL,
+    ->     UPLOAD_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ->     FOREIGN KEY (USERNAME, GAMER_TAG) REFERENCES LOGIN_DETAILS(USERNAME, GAMER_TAG)
+    -> );
+Query OK, 0 rows affected (1.80 sec)
+
+
+
+
+
+
+mysql> INSERT INTO USER_UPLOADS (UPLOAD_ID, USERNAME, GAMER_TAG, ACHIEVEMENT_SCREENSHOT, UPLOAD_DATE) VALUES
+    -> (2523619, 'SAHIL', 'SAHILPLAYS', 'Wrong Side of the Track', '2023-07-15 00:00:00'),
+    -> (2825369, 'PRANOV', 'PRANOVISLIVE', 'Upload No Russians', '2022-07-17 00:00:00');
+Query OK, 2 rows affected (1.71 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+
+
+
+mysql> SELECT * FROM USER_UPLOADS;
++-----------+----------+--------------+--------------------------------------------------+---------------------+
+| UPLOAD_ID | USERNAME | GAMER_TAG    | ACHIEVEMENT_SCREENSHOT                           | UPLOAD_DATE         |
++-----------+----------+--------------+--------------------------------------------------+---------------------+
+|   2523619 | SAHIL    | SAHILPLAYS   | 0x57726F6E672053696465206F662074686520547261636B | 2023-07-15 00:00:00 |
+|   2825369 | PRANOV   | PRANOVISLIVE | 0x55706C6F6164204E6F205275737369616E73           | 2022-07-17 00:00:00 |
++-----------+----------+--------------+--------------------------------------------------+---------------------+
+2 rows in set (0.00 sec)
+
+
+
+ CREATE TABLE USER_REVIEWS (
+    ->     REVIEW_ID INT AUTO_INCREMENT PRIMARY KEY,
+    ->     USERNAME VARCHAR(50) NOT NULL,
+    ->     GAMER_TAG VARCHAR(50) NOT NULL,
+    ->     GAME_NAME VARCHAR(100) NOT NULL,
+    ->     REVIEW TEXT NOT NULL,
+    ->     REVIEW_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ->     FOREIGN KEY (USERNAME, GAMER_TAG) REFERENCES LOGIN_DETAILS (USERNAME, GAMER_TAG)
+    -> );
+Query OK, 0 rows affected (0.11 sec)
+
+
+
+mysql> INSERT INTO USER_REVIEWS (REVIEW_ID, USERNAME, GAMER_TAG, GAME_NAME, REVIEW, REVIEW_DATE) VALUES
+    -> (1487936, 'SAHIL', 'SAHILPLAYS', 'RED DEAD REDEMPTION', 'WRONG SIDE OF THE TRACK', '2023-07-15 00:00:00'),
+    -> (1785631, 'PRANOV', 'PRANOVISLIVE', 'CYBERPUNK', 'COFFIN DANCE GTA5', '2022-07-17 00:00:00');
+Query OK, 2 rows affected (0.60 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+
+
+
+mysql> SELECT * FROM USER_REVIEWS;
++-----------+----------+--------------+---------------------+-------------------------+---------------------+
+| REVIEW_ID | USERNAME | GAMER_TAG    | GAME_NAME           | REVIEW                  | REVIEW_DATE         |
++-----------+----------+--------------+---------------------+-------------------------+---------------------+
+|   1487936 | SAHIL    | SAHILPLAYS   | RED DEAD REDEMPTION | WRONG SIDE OF THE TRACK | 2023-07-15 00:00:00 |
+|   1785631 | PRANOV   | PRANOVISLIVE | CYBERPUNK           | COFFIN DANCE GTA5       | 2022-07-17 00:00:00 |
++-----------+----------+--------------+---------------------+-------------------------+---------------------+
+2 rows in set (0.00 sec)
+
+
+
+
+mysql>  CREATE TABLE pro_tips (
+    ->          tip_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->          username VARCHAR(50) NOT NULL,
+    ->          gamer_tag VARCHAR(50) NOT NULL,
+    ->          tip_description TEXT NOT NULL,
+    ->          tip_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ->          provided_by ENUM('developer', 'experienced_user') NOT NULL,
+    ->          FOREIGN KEY (username, gamer_tag) REFERENCES login_details(username, gamer_tag)
+    ->      );
+
+
+
+
+
+CREATE TABLE pro_tips (
+    ->          tip_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->          username VARCHAR(50) NOT NULL,
+    ->          gamer_tag VARCHAR(50) NOT NULL,
+    ->          tip_description TEXT NOT NULL,
+    ->          tip_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ->          provided_by ENUM('developer', 'experienced_user') NOT NULL,
+    ->          FOREIGN KEY (username, gamer_tag) REFERENCES login_details(username, gamer_tag)
+    ->      );
+Query OK, 0 rows affected (0.45 sec)
+
+
+
+mysql> INSERT INTO pro_tips (tip_id, username, gamer_tag, tip_description, tip_date, provided_by) VALUES
+    -> (1478937, 'SAHIL', 'SAHILPLAYS', 'TRY TO BEAT THE TRAIN BEFORE GOING TO GROVE STREET AND SHOOT THE VAGOS GANG MEMBER', '2023-07-21 00:00:00', 'developer'),
+    -> (18735461, 'PRANOV', 'PRANOVISLIVE', 'SHOOTING ABIGHAN BEFORE FIGHTING WITH DWAN', '2023-07-15 00:00:00', 'experienced_user');
+Query OK, 2 rows affected (0.34 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+
+
+mysql> SELECT * FROM PRO_TIPS;
++----------+----------+--------------+------------------------------------------------------------------------------------+---------------------+------------------+
+| tip_id   | username | gamer_tag    | tip_description
+                                                         | tip_date            | provided_by      |
++----------+----------+--------------+------------------------------------------------------------------------------------+---------------------+------------------+
+|  1478937 | SAHIL    | SAHILPLAYS   | TRY TO BEAT THE TRAIN BEFORE GOING TO GROVE STREET AND SHOOT THE VAGOS GANG MEMBER | 2023-07-21 00:00:00 | developer        |
+| 18735461 | PRANOV   | PRANOVISLIVE | SHOOTING ABIGHAN BEFORE FIGHTING WITH DWAN                                         | 2023-07-15 00:00:00 | experienced_user |
++----------+----------+--------------+------------------------------------------------------------------------------------+---------------------+------------------+
+2 rows in set (0.00 sec)
+
+
+
+
+ CREATE TABLE FAQ (
+    ->     FAQ_ID INT AUTO_INCREMENT PRIMARY KEY,
+    ->     USERNAME VARCHAR(50) NOT NULL,
+    ->     GAMER_TAG VARCHAR(50) NOT NULL,
+    ->     QUESTION TEXT NOT NULL,
+    ->     ANSWER TEXT,
+    ->     FAQ_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ->     FOREIGN KEY (USERNAME, GAMER_TAG) REFERENCES LOGIN_DETAILS (USERNAME, GAMER_TAG)
+    -> );
+Query OK, 0 rows affected (0.38 sec)
+
+
+
+
+mysql> INSERT INTO FAQ (FAQ_ID, USERNAME, GAMER_TAG, QUESTION, ANSWER, FAQ_DATE) VALUES
+    -> (1748936, 'SAHIL', 'SAHILPLAYS', 'CAN WE LEAVE BIG SMOKE AND COMPLETE MISSION?', 'NO, HE IS NECESSARY', '2023-07-21 00:00:00'),
+    -> (1853631, 'PRANOV', 'PRANOVISLIVE', 'CAN WE JUMP ON CLIFF BEFORE JOHN FINISHES SHOOTING?', 'YES! YOU CAN SAVE LOT OF TIME', '2023-07-15 00:00:00');
+Query OK, 2 rows affected (1.68 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+
+
+
+mysql> SELECT * FROM FAQ;
++---------+----------+--------------+-----------------------------------------------------+-------------------------------+---------------------+
+| FAQ_ID  | USERNAME | GAMER_TAG    | QUESTION
+                         | ANSWER                        | FAQ_DATE            |
++---------+----------+--------------+-----------------------------------------------------+-------------------------------+---------------------+
+| 1748936 | SAHIL    | SAHILPLAYS   | CAN WE LEAVE BIG SMOKE AND COMPLETE MISSION?        | NO, HE IS NECESSARY           | 2023-07-21 00:00:00 |
+| 1853631 | PRANOV   | PRANOVISLIVE | CAN WE JUMP ON CLIFF BEFORE JOHN FINISHES SHOOTING? | YES! YOU CAN SAVE LOT OF TIME | 2023-07-15 00:00:00 |
++---------+----------+--------------+-----------------------------------------------------+-------------------------------+---------------------+
+2 rows in set (0.00 sec)
+
+
+
+mysql> CREATE TABLE payment_receipts (
+    ->          receipt_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->          username VARCHAR(50) NOT NULL,
+    ->          gamer_tag VARCHAR(50) NOT NULL,
+    ->          game_name VARCHAR(100) NOT NULL,
+    ->          amount_paid DECIMAL(10, 2) NOT NULL,
+    ->          purchase_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ->          FOREIGN KEY (username, gamer_tag) REFERENCES login_details(username, gamer_tag)
+    -> );
+Query OK, 0 rows affected (1.89 sec)
+
+
+
+
+ INSERT INTO payment_receipts (receipt_id, username, gamer_tag, game_name, amount_paid, purchase_date) VALUES
+    -> (23756981, 'SAHIL', 'SAHILPLAYS', 'RED DEAD REDEMPTION', 126.00, '2023-03-23 00:00:00'),
+    -> (2745837, 'PRANOV', 'PRANOVISLIVE', 'CYBERPUNK', 80.00, '2023-03-16 00:00:00');
+Query OK, 2 rows affected (0.31 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+
+
+mysql> SELECT * FROM AMOUNT_PAID;
+ERROR 1146 (42S02): Table 'figma_interface1.amount_paid' doesn't exist
+mysql> SELECT * FROM PAYMENT_RECEIPTS;
++------------+----------+--------------+---------------------+-------------+---------------------+
+| receipt_id | username | gamer_tag    | game_name           | amount_paid | purchase_date       |
++------------+----------+--------------+---------------------+-------------+---------------------+
+|    2745837 | PRANOV   | PRANOVISLIVE | CYBERPUNK           |       80.00 | 2023-03-16 00:00:00 |
+|   23756981 | SAHIL    | SAHILPLAYS   | RED DEAD REDEMPTION |      126.00 | 2023-03-23 00:00:00 |
++------------+----------+--------------+---------------------+-------------+---------------------+
+2 rows in set (0.04 sec)
+
