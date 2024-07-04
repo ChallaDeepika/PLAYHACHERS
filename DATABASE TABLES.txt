@@ -1,0 +1,88 @@
+ CREATE TABLE LOGIN_DETAILS(
+    -> USERNAME VARCHAR(50) NOT NULL UNIQUE,
+    -> PASSWORD VARCHAR(30) NOT NULL,
+    -> GAMER_TAG VARCHAR(50) UNIQUE
+    -> );
+
+
+ALTER TABLE login_details ADD UNIQUE (username, gamer_tag);
+
+
+CREATE TABLE user_purchases (
+    ->     purchase_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     username VARCHAR(50) NOT NULL,
+    ->     gamer_tag VARCHAR(50) NOT NULL,
+    ->     game_name VARCHAR(100) NOT NULL,
+    ->     purchase_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ->     FOREIGN KEY (username, gamer_tag) REFERENCES login_details(username, gamer_tag)
+    -> );
+
+
+ CREATE TABLE USER_UPLOADS(
+    -> UPLOAD_ID INT AUTO_INCREMENT PRIMARY KEY,
+    -> USERNAME VARCHAR(50) NOT NULL,
+    -> GAMER_TAG VARCHAR(50) NOT NULL,
+    -> ACHIEVEMENT_SCREENSHOT BLOB NOT NULL,
+    -> UPLOAD_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    -> FOREIGN KEY(USERNAME,GAMER_TAG) REFERENCES LOGIN_DETAILS(USERNAME,GAM
+ER_TAG)
+    -> );
+
+ CREATE TABLE USER_REVIEWS(
+    -> REVIEW_ID INT AUTO_INCREMENT PRIMARY KEY,
+    -> USERNAME VARCHAR(50) NOT NULL,
+    -> GAMER_TAG VARCHAR(50) NOT NULL,
+    -> GAME_NAME VARCHAR(100) NOT NULL,
+    -> REVIEW TEXT NOT NULL,
+    -> REVIEW_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    -> FOREIGN KEY(USERNAME,GAMER_TAG)REFERENCES LOGIN_DETAILS(USERNAME,GAME
+R_TAG)
+    -> );
+
+
+ CREATE TABLE pro_tips (
+    ->     tip_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     username VARCHAR(50) NOT NULL,
+    ->     gamer_tag VARCHAR(50) NOT NULL,
+    ->     tip_description TEXT NOT NULL,
+    ->     tip_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ->     provided_by ENUM('developer', 'experienced_user') NOT NULL,
+    ->     FOREIGN KEY (username, gamer_tag) REFERENCES login_details(username, gamer_tag)
+    -> );
+
+
+ CREATE TABLE FAQ(
+    -> FAQ_ID INT AUTO_INCREMENT PRIMARY KEY,
+    -> USERNAME VARCHAR(50) NOT NULL,
+    -> GAMER_TAG VARCHAR(50) NOT NULL,
+    -> QUESTION TEXT NOT NULL,
+    -> ANSWER TEXT,
+    -> FAQ_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    -> FOREIGN KEY (USERNAME,GAMER_TAG) REFERENCES LOGIN_DETAILS(USERNAME,GA
+MER_TAG)
+    -> );
+
+ CREATE TABLE payment_receipts (
+    ->     receipt_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     username VARCHAR(50) NOT NULL,
+    ->     gamer_tag VARCHAR(50) NOT NULL,
+    ->     game_name VARCHAR(100) NOT NULL,
+    ->     amount_paid DECIMAL(10, 2) NOT NULL,
+    ->     purchase_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ->     FOREIGN KEY (username, gamer_tag) REFERENCES login_details(username, gamer_tag)
+
+
+SHOW TABLES;
++---------------------------+
+| Tables_in_figma_interface |
++---------------------------+
+| faq                       |
+| login_details             |
+| payment_receipts          |
+| pro_tips                  |
+| user_purchases            |
+| user_reviews              |
+| user_uploads              |
++---------------------------+
+7 rows 
+
